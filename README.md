@@ -1,1 +1,1 @@
-Influx Db with Docker
+InfluxDb with Docker
