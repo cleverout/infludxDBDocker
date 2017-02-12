@@ -1,0 +1,31 @@
+influxdb:
+  build: influxdb
+  container_name: influxdb
+  ports:
+    - "8083:8083"
+    - "8086:8086"
+    - "8090:8090"
+  env_file:
+    - influxdb/env.influxdb
+  volumes:
+    - ./influxdb/influxdb.conf:/etc/influxdb/influxdb.conf:ro
+    - ./data:/var/lib/influxdb/data
+
+telegraf:
+  build: telegraf
+  container_name: telegraf
+  links:
+    - influxdb
+  volumes:
+    - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+
+grafana:
+  build: grafana
+  container_name: grafana
+  ports:
+    - "3000:3000"
+  volumes:
+    - ./grafana/grafana.ini:/etc/grafana/grafana.ini
+    - ./data/grafana:/var/lib/grafana
+  links:
+    - influxdb
